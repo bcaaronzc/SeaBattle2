@@ -7,6 +7,7 @@ public class BattleShip {
 	private int loc[][];
 	private int hitNum;
 	
+	// ¹¹Ôìº¯Êý
 	BattleShip(int initSize){
 		size = initSize;
 		hitNum = 0;
