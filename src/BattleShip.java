@@ -32,8 +32,8 @@ public class BattleShip {
 		
 		if (isVertical){
 			//System.out.println("isVertical");
-			initRow = (int)(Math.random() * (maxRow - size + 1));
-			initCol = (int)(Math.random() * (maxCol + 1));
+			initRow = (int)(Math.random() * (maxRow - size));
+			initCol = (int)(Math.random() * (maxCol));
 			if (size == 2){
 				int[][] tempLoc = {{initRow, initCol}, {initRow + 1, initCol}};
 				randomLoc = tempLoc;
@@ -45,8 +45,8 @@ public class BattleShip {
 		}
 		else{
 			//System.out.println("!isVertical");
-			initRow = (int)(Math.random() * (maxRow + 1));
-			initCol = (int)(Math.random() * (maxCol - size + 1));
+			initRow = (int)(Math.random() * (maxRow));
+			initCol = (int)(Math.random() * (maxCol - size));
 			if (size == 2){
 				int[][] tempLoc = {{initRow, initCol}, {initRow, initCol + 1}};
 				randomLoc = tempLoc;
