@@ -1,8 +1,9 @@
+import java.util.Scanner;
 
 public class GameBoard {
 	static int BOARDROW = 7;
 	static int BOARDCOL = 7;
-	static int shipNum = 3;
+	static int shipNum = 4;
 
 	int[][] gameBoard;
 	BattleShip[] battleShips;
@@ -66,6 +67,27 @@ public class GameBoard {
 		return false;
 	}
 
+	// 发射炮弹
+	public void fireCannon(int[] hitLoc){
+		for (int i = 0; i < shipNum; i++){
+			if (battleShips[i].isHit(hitLoc)){
+				System.out.println("You hit battle ship " + i + "!");
+				gameBoard[hitLoc[0]][hitLoc[1]] = -1;
+			}
+		}
+	}
+	
+	// 获取打击位置（测试用）
+	public int[] getHitLoc(){
+		int[] tempHit = new int[2];
+		Scanner input = new Scanner(System.in);
+		System.out.print("输入打击横坐标: ");
+		tempHit[0] = input.nextInt();
+		System.out.print("输入打击纵坐标: ");
+		tempHit[1] = input.nextInt();
+		return tempHit;
+	}
+	
 	// 打印游戏板（测试用）
 	public void printBoard(){
 		System.out.println("-------The status of the board now:-------");
@@ -84,6 +106,10 @@ public class GameBoard {
 		for (int i = 0; i < gameBoard.shipNum; i++){
 			gameBoard.battleShips[i].printStatus();
 		}
+		gameBoard.printBoard();
+		
+		gameBoard.fireCannon(gameBoard.getHitLoc());
+		
 		gameBoard.printBoard();
 	}
 
