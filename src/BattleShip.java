@@ -31,7 +31,7 @@ public class BattleShip {
 		}
 		
 		if (isVertical){
-			System.out.println("isVertical");
+			//System.out.println("isVertical");
 			initRow = (int)(Math.random() * (maxRow - size + 1));
 			initCol = (int)(Math.random() * (maxCol + 1));
 			if (size == 2){
@@ -44,7 +44,7 @@ public class BattleShip {
 			}
 		}
 		else{
-			System.out.println("!isVertical");
+			//System.out.println("!isVertical");
 			initRow = (int)(Math.random() * (maxRow + 1));
 			initCol = (int)(Math.random() * (maxCol - size + 1));
 			if (size == 2){
@@ -92,6 +92,16 @@ public class BattleShip {
 	// 返回位置
 	public int[][] getLoc(){
 		return loc;
+	}
+	
+	// 打印信息（测试用）
+	public void printStatus(){
+		System.out.println("Size = " + size);
+		System.out.println("Loc = ");
+		for (int i = 0; i < size; i++){
+			System.out.println(Arrays.toString(loc[i]));
+		}
+		System.out.print("\n");
 	}
 	
 	public static void main(String[] args) {
