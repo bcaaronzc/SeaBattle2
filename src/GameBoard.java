@@ -4,6 +4,8 @@ public class GameBoard {
 	static int BOARDROW = 7;
 	static int BOARDCOL = 7;
 	static int shipNum = 4;
+	
+	int numSink = 0;
 
 	int[][] gameBoard;
 	BattleShip[] battleShips;
@@ -73,8 +75,20 @@ public class GameBoard {
 			if (battleShips[i].isHit(hitLoc)){
 				System.out.println("You hit battle ship " + i + "!");
 				gameBoard[hitLoc[0]][hitLoc[1]] = -1;
+				if (battleShips[i].isSink()){
+					System.out.println("Battle ship " + (i + 1) + " is destroyed!");
+					numSink++;
+				}
 			}
 		}
+	}
+
+	// 判断是否获胜
+	public boolean isWin(){
+		if (numSink >= shipNum){
+			return true;
+		}
+		return false;
 	}
 	
 	// 获取打击位置（测试用）
@@ -108,9 +122,13 @@ public class GameBoard {
 		}
 		gameBoard.printBoard();
 		
-		gameBoard.fireCannon(gameBoard.getHitLoc());
+		do{
+			gameBoard.fireCannon(gameBoard.getHitLoc());
+			gameBoard.printBoard();
+		} while(!gameBoard.isWin());
 		
-		gameBoard.printBoard();
+		System.out.println("You Win!");
+		
 	}
 
 }
