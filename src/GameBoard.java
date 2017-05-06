@@ -109,6 +109,7 @@ public class GameBoard {
 		tempHit[0] = input.nextInt();
 		System.out.print("ÊäÈë´ò»÷×İ×ø±ê: ");
 		tempHit[1] = input.nextInt();
+		input.close();
 		return tempHit;
 	}
 	
