@@ -1,9 +1,9 @@
 import java.util.Scanner;
 
 public class GameBoard {
-	static int BOARDROW = 7;
-	static int BOARDCOL = 7;
-	static int shipNum = 4;
+	private static int BOARDROW = 7;
+	private static int BOARDCOL = 7;
+	private static int shipNum = 4;
 	
 	int numSink = 0;
 
@@ -89,6 +89,16 @@ public class GameBoard {
 			return true;
 		}
 		return false;
+	}
+	
+	// 获取游戏板宽度
+	public int getRowNum(){
+		return BOARDROW;
+	}
+	
+	// 获取游戏板长度
+	public int getColNum(){
+		return BOARDCOL;
 	}
 	
 	// 获取打击位置（测试用）
