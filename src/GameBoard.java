@@ -1,9 +1,9 @@
 import java.util.Scanner;
 
 public class GameBoard {
-	private static int BOARDROW = 7;
-	private static int BOARDCOL = 7;
-	private static int shipNum = 4;
+	static int BOARDROW = 7;
+	static int BOARDCOL = 7;
+	static int shipNum = 4;
 	
 	int numSink = 0;
 
