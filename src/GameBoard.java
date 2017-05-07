@@ -94,8 +94,8 @@ public class GameBoard {
 	}
 	
 	// 获取打击次数
-	public int getHitNum(){
-		return hitNum;
+	public int getScore(){
+		return (BOARDROW * BOARDCOL - hitNum);
 	}
 	
 	// 获取游戏板宽度
@@ -145,7 +145,7 @@ public class GameBoard {
 		} while(!gameBoard.isWin());
 		
 		System.out.println("You Win!");
-		System.out.println("You took " + gameBoard.getHitNum() + " steps.");
+		System.out.println("You took " + gameBoard.getScore() + " steps.");
 		
 	}
 

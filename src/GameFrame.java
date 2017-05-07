@@ -2,6 +2,11 @@ import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -38,6 +43,44 @@ public class GameFrame extends JFrame implements ActionListener{
 		this.add(buttonPanel, BorderLayout.CENTER);
 	}
 	
+	// 保存最高分
+	public void saveHighScore() throws NumberFormatException, IOException{
+		int currentScore = gameBoard.getScore();
+		File highScoreFile = new File("src/HighScore.txt");
+		int[] scoreList = new int[10];
+		int[] originalList = new int[10];
+		if (highScoreFile.exists()){
+			BufferedReader reader = new BufferedReader(new FileReader(highScoreFile));
+			for (int n = 0; n < 10; n++){
+				originalList[n] = Integer.parseInt(reader.readLine());
+			}
+			int i;
+			for (i = 0; i < 10; i++){
+				if (currentScore > originalList[i]){
+					scoreList[i] = currentScore;
+					System.out.println("Write " + scoreList[i]);
+					break;
+				}
+			}
+			for (int j = i + 1; j < 10; j++){
+				scoreList[j] = originalList[j];
+			}
+			FileWriter clearer = new FileWriter("src/HighScore.txt");
+			clearer.write("");
+			clearer.close();
+			FileWriter writer = new FileWriter("src/HighScore.txt", true);
+			for (int m = 0; m < 10; m++){
+				System.out.println("Write " + scoreList[m]);
+				writer.write("" + scoreList[m]);
+				writer.write("\r\n");
+			}
+			writer.close();
+		}
+		else {
+			System.out.println("Something is wrong, high score file not found.");
+		}
+	}
+	
 	// 实现监听方法
 	public void actionPerformed(ActionEvent e){
 		for (int row = 0; row < gameBoard.getRowNum(); row++){
@@ -48,6 +91,11 @@ public class GameFrame extends JFrame implements ActionListener{
 					buttons[row][col].setText("" + gameBoard.gameBoard[row][col]);
 					if (gameBoard.isWin()){
 						WinDialog winDialog = new WinDialog();
+						try {
+							saveHighScore();
+						} catch (NumberFormatException | IOException e1) {
+							e1.printStackTrace();
+						}
 					}
 				}
 			}
