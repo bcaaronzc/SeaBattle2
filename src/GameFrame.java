@@ -1,4 +1,5 @@
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +9,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -32,10 +34,12 @@ public class GameFrame extends JFrame implements ActionListener{
 	// 添加按钮
 	public void addButtons(){
 		JPanel buttonPanel = new JPanel();
+		//ImageIcon water = new ImageIcon("src/Image/Water.png");
 		buttonPanel.setLayout(new GridLayout(gameBoard.getRowNum(), gameBoard.getColNum()));
 		for (int row = 0; row < gameBoard.getRowNum(); row++){
 			for (int col = 0; col < gameBoard.getColNum(); col++){
 				buttons[row][col] = new JButton("");
+				buttons[row][col].setBackground(new Color(162, 230, 255));
 				buttons[row][col].addActionListener(this);
 				buttonPanel.add(buttons[row][col]);
 			}
@@ -56,14 +60,17 @@ public class GameFrame extends JFrame implements ActionListener{
 			}
 			int i;
 			for (i = 0; i < 10; i++){
-				if (currentScore > originalList[i]){
+				if (currentScore <= originalList[i]){
+					scoreList[i] = originalList[i];
+				}
+				else if (currentScore > originalList[i]){
 					scoreList[i] = currentScore;
 					System.out.println("Write " + scoreList[i]);
 					break;
 				}
 			}
 			for (int j = i + 1; j < 10; j++){
-				scoreList[j] = originalList[j];
+				scoreList[j] = originalList[j - 1];
 			}
 			FileWriter clearer = new FileWriter("src/HighScore.txt");
 			clearer.write("");
@@ -83,12 +90,18 @@ public class GameFrame extends JFrame implements ActionListener{
 	
 	// 实现监听方法
 	public void actionPerformed(ActionEvent e){
+		ImageIcon hitIcon = new ImageIcon("src/Image/hit.jpg");
 		for (int row = 0; row < gameBoard.getRowNum(); row++){
 			for (int col = 0; col < gameBoard.getColNum(); col++){
 				if (e.getSource() == buttons[row][col]){
 					int hitLoc[] = {row, col};
 					gameBoard.fireCannon(hitLoc);
-					buttons[row][col].setText("" + gameBoard.gameBoard[row][col]);
+					if (gameBoard.gameBoard[row][col] == -1){
+						buttons[row][col].setIcon(hitIcon);
+					}
+					if (gameBoard.gameBoard[row][col] == 0){
+						buttons[row][col].setBackground(new Color(162, 185, 255));
+					}
 					if (gameBoard.isWin()){
 						WinDialog winDialog = new WinDialog();
 						try {
