@@ -1,9 +1,10 @@
 import java.util.Scanner;
 
 public class GameBoard {
-	static int BOARDROW = 7;
-	static int BOARDCOL = 7;
-	static int shipNum = 4;
+	private static int BOARDROW = 7;
+	private static int BOARDCOL = 7;
+	private static int shipNum = 4;
+	int hitNum = 0;
 	
 	int numSink = 0;
 
@@ -71,6 +72,7 @@ public class GameBoard {
 
 	// 发射炮弹
 	public void fireCannon(int[] hitLoc){
+		hitNum++;
 		for (int i = 0; i < shipNum; i++){
 			if (battleShips[i].isHit(hitLoc)){
 				System.out.println("You hit battle ship " + i + "!");
@@ -91,6 +93,11 @@ public class GameBoard {
 		return false;
 	}
 	
+	// 获取打击次数
+	public int getHitNum(){
+		return hitNum;
+	}
+	
 	// 获取游戏板宽度
 	public int getRowNum(){
 		return BOARDROW;
@@ -109,7 +116,6 @@ public class GameBoard {
 		tempHit[0] = input.nextInt();
 		System.out.print("输入打击纵坐标: ");
 		tempHit[1] = input.nextInt();
-		input.close();
 		return tempHit;
 	}
 	
@@ -139,6 +145,7 @@ public class GameBoard {
 		} while(!gameBoard.isWin());
 		
 		System.out.println("You Win!");
+		System.out.println("You took " + gameBoard.getHitNum() + " steps.");
 		
 	}
 
