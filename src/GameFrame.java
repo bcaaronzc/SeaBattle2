@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GameFrame extends JFrame implements ActionListener{
@@ -45,19 +46,49 @@ public class GameFrame extends JFrame implements ActionListener{
 					int hitLoc[] = {row, col};
 					gameBoard.fireCannon(hitLoc);
 					buttons[row][col].setText("" + gameBoard.gameBoard[row][col]);
+					if (gameBoard.isWin()){
+						WinDialog winDialog = new WinDialog();
+					}
 				}
 			}
 		}
 	}
 	
+	// Ö÷º¯Êý
 	public static void main(String args[]){
 		GameFrame gameFrame = new GameFrame();
+		gameFrame.gameBoard.printBoard();
 	}
 }
 
-class WinDialog extends JDialog{
+class WinDialog extends JDialog implements ActionListener{
+	JButton comfirmButton;
+	JLabel winLabel;
 	
 	public WinDialog(){
+		this.setTitle("Congratulations!");
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setBounds(200, 200, 300, 115);
 		
+		winLabel = new JLabel("Congratulations! You win!");
+		comfirmButton = new JButton("Ok");
+		comfirmButton.addActionListener(this);
+		
+		JPanel labelPanel = new JPanel();
+		JPanel buttonPanel = new JPanel();
+		
+		labelPanel.add(winLabel);
+		buttonPanel.add(comfirmButton);
+		
+		this.add(labelPanel, BorderLayout.CENTER);
+		this.add(buttonPanel, BorderLayout.SOUTH);
+		
+		this.setVisible(true);
+	}
+	
+	public void actionPerformed(ActionEvent e){
+		if (e.getActionCommand() == "Ok"){
+			this.dispose();
+		}
 	}
 }
