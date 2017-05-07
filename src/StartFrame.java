@@ -21,6 +21,7 @@ public class StartFrame extends JFrame implements ActionListener{
 	
 	public StartFrame(){
 		this.setBounds(200, 200, 860, 538);
+		this.setTitle("SeaBattle2");
 		this.setBackground(new Color(255, 255, 255));
 		this.getContentPane().setBackground(Color.white);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
