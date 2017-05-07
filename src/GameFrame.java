@@ -103,7 +103,7 @@ public class GameFrame extends JFrame implements ActionListener{
 						buttons[row][col].setBackground(new Color(162, 185, 255));
 					}
 					if (gameBoard.isWin()){
-						WinDialog winDialog = new WinDialog();
+						WinDialog winDialog = new WinDialog(gameBoard.getScore());
 						try {
 							saveHighScore();
 						} catch (NumberFormatException | IOException e1) {
@@ -124,14 +124,15 @@ public class GameFrame extends JFrame implements ActionListener{
 
 class WinDialog extends JDialog implements ActionListener{
 	JButton comfirmButton;
-	JLabel winLabel;
+	JLabel winLabel, scoreLabel;
 	
-	public WinDialog(){
+	public WinDialog(int score){
 		this.setTitle("Congratulations!");
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setBounds(200, 200, 300, 115);
+		this.setBounds(200, 200, 250, 140);
 		
 		winLabel = new JLabel("Congratulations! You win!");
+		scoreLabel = new JLabel("Your score is " + score);
 		comfirmButton = new JButton("Ok");
 		comfirmButton.addActionListener(this);
 		
@@ -139,6 +140,7 @@ class WinDialog extends JDialog implements ActionListener{
 		JPanel buttonPanel = new JPanel();
 		
 		labelPanel.add(winLabel);
+		labelPanel.add(scoreLabel);
 		buttonPanel.add(comfirmButton);
 		
 		this.add(labelPanel, BorderLayout.CENTER);
