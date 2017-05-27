@@ -5,13 +5,16 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 public class PVEModeFrame extends JFrame implements ActionListener{
 	GameBoard computerBoard, playerBoard;
 	JButton[][] computerButtons, playerButtons;
+	JTextArea instructionArea, stateArea;
 	
 	// 构造函数
 	public PVEModeFrame(){
@@ -25,8 +28,29 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		addButtons();
+		addTextArea();
 		
 		this.setVisible(true);
+	}
+	
+	// 开始游戏
+	public void gameStart(){
+		// TODO This function control all the process
+	}
+	
+	// 添加文本区(for the constructor)
+	public void addTextArea(){
+		JPanel textAreaPanel = new JPanel();
+		textAreaPanel.setLayout(new GridLayout(2, 1));
+		instructionArea = new JTextArea("");
+		instructionArea.setEditable(false);
+		instructionArea.setBorder(BorderFactory.createLineBorder(Color.black,1));
+		stateArea = new JTextArea("");
+		stateArea.setEditable(false);
+		stateArea.setBorder(BorderFactory.createLineBorder(Color.black,1));
+		textAreaPanel.add(instructionArea);
+		textAreaPanel.add(stateArea);
+		this.add(textAreaPanel);
 	}
 	
 	// 添加按钮(for the constructor)
