@@ -50,6 +50,11 @@ public class GameBoard {
 			}
 		}
 	}
+
+	// 添加单个船
+	public void addOneShip(int shipNum, int[][] initLoc){
+		battleShips[shipNum].setLoc(initLoc);
+	}
 	
 	// 确定船的位置
 	public void arrangeShips(){
