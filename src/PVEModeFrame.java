@@ -1,6 +1,7 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,11 +16,15 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 	GameBoard computerBoard, playerBoard;
 	JButton[][] computerButtons, playerButtons;
 	JTextArea instructionArea, stateArea;
+	int shipCount, shipLenCount;
+	int[][] tempLoc = {};
 	
 	// 构造函数
 	public PVEModeFrame(){
+		shipCount = 0;
+		shipLenCount = 0;
 		computerBoard = new GameBoard();
-		playerBoard = new GameBoard();
+		playerBoard = new GameBoard(4);
 		computerButtons = new JButton[computerBoard.getRowNum()][computerBoard.getColNum()];
 		playerButtons = new JButton[playerBoard.getRowNum()][playerBoard.getColNum()];
 		
@@ -30,30 +35,37 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		addButtons();
 		addTextArea();
 		
+		for (int row = 0; row < computerBoard.getRowNum(); row++){
+			for (int col = 0; col < computerBoard.getColNum(); col++){
+				computerButtons[row][col].setEnabled(false);
+			}
+		}
+		
 		this.setVisible(true);
 	}
 	
-	// 开始游戏
-	public void gameStart(){
-		// TODO This function control all the process
-	}
-	
-	// 添加文本区(for the constructor)
+	// constructor: 添加文本区
 	public void addTextArea(){
 		JPanel textAreaPanel = new JPanel();
 		textAreaPanel.setLayout(new GridLayout(2, 1));
 		instructionArea = new JTextArea("");
 		instructionArea.setEditable(false);
 		instructionArea.setBorder(BorderFactory.createLineBorder(Color.black,1));
+		instructionArea.setFont(new Font("Arial", Font.BOLD, 24));
+		instructionArea.setLineWrap(true);
+		instructionArea.setText("Place your battle ship No.1\nIt's size is 2");
 		stateArea = new JTextArea("");
 		stateArea.setEditable(false);
 		stateArea.setBorder(BorderFactory.createLineBorder(Color.black,1));
+		stateArea.setFont(new Font("Arial", Font.BOLD, 24));
+		stateArea.setLineWrap(true);
+		stateArea.setText("Player choose the locations of the battle ships.");
 		textAreaPanel.add(instructionArea);
 		textAreaPanel.add(stateArea);
 		this.add(textAreaPanel);
 	}
 	
-	// 添加按钮(for the constructor)
+	// constructor: 添加按钮
 	public void addButtons(){
 		JPanel computerButtonPanel = new JPanel();
 		JPanel playerButtonPanel = new JPanel();
@@ -81,10 +93,31 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		this.add(playerButtonPanel, BorderLayout.EAST);
 	}
 
+	// 开始游戏
+	public void gameStart(){
+		// TODO This function control all the process
+	}
+	
+	// 玩家确定船的位置
+	public void addShips(int row, int col){
+		if (shipCount == 0){
+			if (shipLenCount == 0){
+				shipLenCount++;
+			}
+		}
+	}
+	
+	// 确定选择的位置是否符合规则
+	public boolean isLocOk(int[] loc){
+		// TODO 确定是否符合规则（顺便想个名字）
+		return true;
+	}
+	
 	// 监听方法
 	public void actionPerformed(ActionEvent e){
 		
 	}
+	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

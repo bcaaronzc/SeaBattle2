@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class GameBoard {
 	private static int BOARDROW = 7;
 	private static int BOARDCOL = 7;
-	private static int shipNum = 4;
+	private int shipNum = 4;
 	int hitNum = 0;
 	
 	int numSink = 0;
@@ -29,6 +29,26 @@ public class GameBoard {
 			}
 		}
 		arrangeShips();
+	}
+	
+	// 第二个构造函数
+	public GameBoard(int initShipNum){
+		shipNum = initShipNum;
+		battleShips = new BattleShip[shipNum];
+		gameBoard = new int[BOARDROW][BOARDCOL];
+		for (int row = 0; row < BOARDROW; row++){
+			for (int col = 0; col < BOARDCOL; col++){
+				gameBoard[row][col] = 0;
+			}
+		}
+		for (int i = 0; i < shipNum; i++){
+			if (i < (shipNum / 2)){
+				battleShips[i] = new BattleShip(2);
+			}
+			else{
+				battleShips[i] = new BattleShip(3);
+			}
+		}
 	}
 	
 	// 确定船的位置
