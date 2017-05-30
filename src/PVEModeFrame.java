@@ -94,19 +94,13 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		this.add(computerButtonPanel, BorderLayout.WEST);
 		this.add(playerButtonPanel, BorderLayout.EAST);
 	}
-
-	// 开始游戏
-	public void gameStart(){
-		// TODO This function control all the process
-	}
 	
-	// 玩家确定船的位置
+	// actionPerformed: 玩家确定船的位置
 	public void addShips(int row, int col){
 		int[] tempInfo = {row, col};
 		// 第一艘船
 		if (shipCounter == 0){
 			if (shipLenCounter == 0){
-				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter++;
 					tempLoc.add(tempInfo);
@@ -120,7 +114,6 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 				}
 			}
 			if (shipLenCounter == 1){
-				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter = 0;
 					tempLoc.add(tempInfo);
@@ -140,7 +133,6 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		// 第二艘船
 		if (shipCounter == 1){
 			if (shipLenCounter == 0){
-				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter++;
 					tempLoc.add(tempInfo);
@@ -154,7 +146,6 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 				}
 			}
 			if (shipLenCounter == 1){
-				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter = 0;
 					tempLoc.add(tempInfo);
@@ -174,7 +165,6 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		// 第三艘船
 		if (shipCounter == 2){
 			if (shipLenCounter == 0){
-				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter++;
 					tempLoc.add(tempInfo);
@@ -188,7 +178,6 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 				}
 			}
 			if (shipLenCounter == 1){
-				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter++;
 					tempLoc.add(tempInfo);
@@ -202,7 +191,6 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 				}
 			}
 			if (shipLenCounter == 2){
-				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter = 0;
 					tempLoc.add(tempInfo);
@@ -221,7 +209,6 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		}
 		// 第四艘船
 		if (shipCounter == 3){
-			System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 			if (shipLenCounter == 0){
 				if (isLocOk(tempInfo)){
 					shipLenCounter++;
@@ -236,7 +223,6 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 				}
 			}
 			if (shipLenCounter == 1){
-				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter++;
 					tempLoc.add(tempInfo);
@@ -250,7 +236,6 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 				}
 			}
 			if (shipLenCounter == 2){
-				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter = 0;
 					tempLoc.add(tempInfo);
@@ -334,7 +319,7 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		}
 		return true;
 	}
-	
+
 	// 监听方法
 	public void actionPerformed(ActionEvent e){
 		for (int row = 0; row < playerBoard.getRowNum(); row++){
