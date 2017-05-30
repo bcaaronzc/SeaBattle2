@@ -18,8 +18,7 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 	JButton[][] computerButtons, playerButtons;
 	JTextArea instructionArea, stateArea;
 	int shipCounter, shipLenCounter;
-	//int[][] tempLoc = {};
-	ArrayList<int[]> tempLoc = new ArrayList();
+	ArrayList<int[]> tempLoc = new ArrayList<int[]>();
 	
 	// ¹¹Ôìº¯Êý
 	public PVEModeFrame(){
@@ -191,10 +190,15 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 					playerBoard.addOneShip(shipCounter, tempLoc);
 					tempLoc.clear();
 					shipCounter = 0;
-					instructionArea.setText("Your formation of your ships is all set");
+					instructionArea.setText("Game start");
 					for (int boardRow = 0; boardRow < playerBoard.getRowNum(); boardRow++){
 						for (int boardCol = 0; boardCol < playerBoard.getColNum(); boardCol++){
 							playerButtons[boardRow][boardCol].setEnabled(false);
+						}
+					}
+					for (int boardRow = 0; boardRow < computerBoard.getRowNum(); boardRow++){
+						for (int boardCol = 0; boardCol < computerBoard.getColNum(); boardCol++){
+							computerButtons[boardRow][boardCol].setEnabled(true);
 						}
 					}
 				}
