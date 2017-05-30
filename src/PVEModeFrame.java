@@ -8,8 +8,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
@@ -20,6 +23,7 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 	int shipCounter = 0;
 	int shipLenCounter = 0;
 	ArrayList<int[]> tempLoc = new ArrayList<int[]>();
+	ArrayList<int[]> blocksTaken = new ArrayList<int[]>();
 	
 	// 构造函数
 	public PVEModeFrame(){
@@ -320,12 +324,87 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		return true;
 	}
 
+	// actionPerformed: 一个回合，玩家走一步，电脑走若干步
+	public void oneRound(int rowChoice, int colChoice){
+		// TODO 模式切换，困难的电脑
+		ImageIcon hitIcon = new ImageIcon("src/Image/hit.jpg");
+		int playerHitLoc[] = {rowChoice, colChoice};
+		computerBoard.fireCannon(playerHitLoc);
+		if (computerBoard.gameBoard[rowChoice][colChoice] == -1){
+			computerButtons[rowChoice][colChoice].setIcon(hitIcon);
+			if (computerBoard.isWin()){
+				PlayerWinDialog playerWinDialog = new PlayerWinDialog();
+				return;
+			}
+			return;
+		}
+		if (computerBoard.gameBoard[rowChoice][colChoice] == 0){
+			computerButtons[rowChoice][colChoice].setBackground(new Color(162, 185, 255));
+		}
+		
+		boolean repeat = false;
+		do {
+			int[] computerHitLoc = easyComputer();
+			playerBoard.fireCannon(computerHitLoc);
+			if (playerBoard.gameBoard[computerHitLoc[0]][computerHitLoc[1]] == -1){
+				playerButtons[computerHitLoc[0]][computerHitLoc[1]].setIcon(hitIcon);
+				if (playerBoard.isWin()){
+					PlayerLoseDialog playerLoseDialog = new PlayerLoseDialog();
+					repeat = false;
+					break;
+				}
+				repeat = true;
+			}
+			if (playerBoard.gameBoard[computerHitLoc[0]][computerHitLoc[1]] == 0){
+				playerButtons[computerHitLoc[0]][computerHitLoc[1]].setBackground(new Color(162, 185, 255));
+				repeat = false;
+			}
+		} while (repeat);
+	}
+	
+	// oneRound: 简单的电脑
+	public int[] easyComputer(){
+		int maxRow = playerBoard.getRowNum();
+		int maxCol = playerBoard.getColNum();
+		int randomRow = (int)(Math.random() * maxRow);
+		int randomCol = (int)(Math.random() * maxCol);
+		try {
+			Thread.sleep(500);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		int[] randomLoc = {randomRow, randomCol};
+		while (blocksTaken.contains(randomLoc)){
+			randomRow = (int)(Math.random() * maxRow);
+			randomCol = (int)(Math.random() * maxCol);
+			randomLoc[0] = randomRow;
+			randomLoc[1] = randomCol;
+		}
+		blocksTaken.add(randomLoc);
+		return randomLoc;
+	}
+	
+	// oneRound: 困难的电脑
+	public int[] hardComputer(int maxRow, int maxCol){
+		// TODO 困难的电脑
+		int[] finalLoc = {maxRow, maxCol};
+		return finalLoc;
+	}
+	
 	// 监听方法
 	public void actionPerformed(ActionEvent e){
 		for (int row = 0; row < playerBoard.getRowNum(); row++){
 			for (int col = 0; col < playerBoard.getColNum(); col++){
 				if (e.getSource() == playerButtons[row][col]){
 					addShips(row, col);
+				}
+			}
+		}
+		for (int row = 0; row < computerBoard.getRowNum(); row++){
+			for (int col = 0; col < computerBoard.getColNum(); col++){
+				if (e.getSource() == computerButtons[row][col]){
+					oneRound(row, col);
 				}
 			}
 		}
@@ -336,5 +415,68 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		// TODO Auto-generated method stub
 		PVEModeFrame pveMode = new PVEModeFrame();
 	}
+}
 
+class PlayerWinDialog extends JDialog implements ActionListener{
+	JButton comfirmButton;
+	JLabel winLabel;
+	
+	public PlayerWinDialog(){
+		this.setTitle("Congratulations!");
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setBounds(200, 200, 250, 140);
+		
+		winLabel = new JLabel("Congratulations! You win!");
+		comfirmButton = new JButton("Ok");
+		comfirmButton.addActionListener(this);
+		
+		JPanel labelPanel = new JPanel();
+		JPanel buttonPanel = new JPanel();
+		
+		labelPanel.add(winLabel);
+		buttonPanel.add(comfirmButton);
+		
+		this.add(labelPanel, BorderLayout.CENTER);
+		this.add(buttonPanel, BorderLayout.SOUTH);
+		
+		this.setVisible(true);
+	}
+	
+	public void actionPerformed(ActionEvent e){
+		if (e.getSource() == comfirmButton){
+			this.dispose();
+		}
+	}
+}
+
+class PlayerLoseDialog extends JDialog implements ActionListener{
+	JButton comfirmButton;
+	JLabel loseLabel;
+	
+	public PlayerLoseDialog(){
+		this.setTitle("Sorry!");
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setBounds(200, 200, 250, 140);
+		
+		loseLabel = new JLabel("Sorry, you lose.");
+		comfirmButton = new JButton("Ok");
+		comfirmButton.addActionListener(this);
+		
+		JPanel labelPanel = new JPanel();
+		JPanel buttonPanel = new JPanel();
+		
+		labelPanel.add(loseLabel);
+		buttonPanel.add(comfirmButton);
+		
+		this.add(labelPanel, BorderLayout.CENTER);
+		this.add(buttonPanel, BorderLayout.SOUTH);
+		
+		this.setVisible(true);
+	}
+	
+	public void actionPerformed(ActionEvent e){
+		if (e.getSource() == comfirmButton){
+			this.dispose();
+		}
+	}
 }
