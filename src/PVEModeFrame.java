@@ -17,7 +17,8 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 	GameBoard computerBoard, playerBoard;
 	JButton[][] computerButtons, playerButtons;
 	JTextArea instructionArea, stateArea;
-	int shipCounter, shipLenCounter;
+	int shipCounter = 0;
+	int shipLenCounter = 0;
 	ArrayList<int[]> tempLoc = new ArrayList<int[]>();
 	
 	// 构造函数
@@ -30,7 +31,7 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		playerButtons = new JButton[playerBoard.getRowNum()][playerBoard.getColNum()];
 		
 		this.setTitle("SeaBattle2");
-		this.setSize(240 + 2 * 80 * computerBoard.getRowNum(), 80 * computerBoard.getColNum());
+		this.setSize(600 + 2 * 80 * computerBoard.getRowNum(), 80 * computerBoard.getColNum());
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
 		addButtons();
@@ -102,88 +103,154 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 	// 玩家确定船的位置
 	public void addShips(int row, int col){
 		int[] tempInfo = {row, col};
-		if (shipCounter == 0 || shipCounter == 1){
+		// 第一艘船
+		if (shipCounter == 0){
 			if (shipLenCounter == 0){
+				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter++;
 					tempLoc.add(tempInfo);
-					instructionArea.setText("Place battle ship No." + (shipCounter + 1) +"\nIt's size is 2");
+					instructionArea.setText("Place battle ship No.1" +"\nIt's size is 2");
+					playerButtons[row][col].setBackground(new Color(162, 185, 255));
+					return;
 				}
 				else {
 					instructionArea.setText("You should not place it here");
+					return;
 				}
 			}
 			if (shipLenCounter == 1){
+				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter = 0;
 					tempLoc.add(tempInfo);
 					playerBoard.addOneShip(shipCounter, tempLoc);
 					tempLoc.clear();
 					shipCounter++;
-					instructionArea.setText("Place battle ship No." + (shipCounter + 2) + "\nIt's size is " + (shipCounter + 2));
+					instructionArea.setText("Place battle ship No.2" + "\nIt's size is 2");
+					playerButtons[row][col].setBackground(new Color(162, 185, 255));
+					return;
 				}
 				else {
 					instructionArea.setText("You should not place it here");
+					return;
 				}
 			}
 		}
+		// 第二艘船
+		if (shipCounter == 1){
+			if (shipLenCounter == 0){
+				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
+				if (isLocOk(tempInfo)){
+					shipLenCounter++;
+					tempLoc.add(tempInfo);
+					instructionArea.setText("Place battle ship No.2" + "\nIt's size is 2");
+					playerButtons[row][col].setBackground(new Color(162, 185, 255));
+					return;
+				}
+				else {
+					instructionArea.setText("You should not place it here");
+					return;
+				}
+			}
+			if (shipLenCounter == 1){
+				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
+				if (isLocOk(tempInfo)){
+					shipLenCounter = 0;
+					tempLoc.add(tempInfo);
+					playerBoard.addOneShip(shipCounter, tempLoc);
+					tempLoc.clear();
+					shipCounter++;
+					instructionArea.setText("Place battle ship No.3" + "\nIt's size is 3");
+					playerButtons[row][col].setBackground(new Color(162, 185, 255));
+					return;
+				}
+				else {
+					instructionArea.setText("You should not place it here");
+					return;
+				}
+			}
+		}
+		// 第三艘船
 		if (shipCounter == 2){
 			if (shipLenCounter == 0){
+				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter++;
 					tempLoc.add(tempInfo);
-					instructionArea.setText("Place battle ship No." + (shipCounter + 1) +"\nIt's size is 3");
+					instructionArea.setText("Place battle ship No.3" + "\nIt's size is 3");
+					playerButtons[row][col].setBackground(new Color(162, 185, 255));
+					return;
 				}
 				else {
 					instructionArea.setText("You should not place it here");
+					return;
 				}
 			}
 			if (shipLenCounter == 1){
+				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter++;
 					tempLoc.add(tempInfo);
-					instructionArea.setText("Place battle ship No." + (shipCounter + 1) +"\nIt's size is 3");
+					instructionArea.setText("Place battle ship No.3" + "\nIt's size is 3");
+					playerButtons[row][col].setBackground(new Color(162, 185, 255));
+					return;
 				}
 				else {
 					instructionArea.setText("You should not place it here");
+					return;
 				}
 			}
 			if (shipLenCounter == 2){
+				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter = 0;
 					tempLoc.add(tempInfo);
 					playerBoard.addOneShip(shipCounter, tempLoc);
 					tempLoc.clear();
 					shipCounter++;
-					instructionArea.setText("Place battle ship No." + (shipCounter + 1) +"\nIt's size is 3");
+					instructionArea.setText("Place battle ship No.4" + "\nIt's size is 3");
+					playerButtons[row][col].setBackground(new Color(162, 185, 255));
+					return;
 				}
 				else {
 					instructionArea.setText("You should not place it here");
+					return;
 				}
 			}
 		}
+		// 第四艘船
 		if (shipCounter == 3){
+			System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 			if (shipLenCounter == 0){
 				if (isLocOk(tempInfo)){
 					shipLenCounter++;
 					tempLoc.add(tempInfo);
-					instructionArea.setText("Place battle ship No." + (shipCounter + 1) +"\nIt's size is 3");
+					instructionArea.setText("Place battle ship No.4" + "\nIt's size is 3");
+					playerButtons[row][col].setBackground(new Color(162, 185, 255));
+					return;
 				}
 				else {
 					instructionArea.setText("You should not place it here");
+					return;
 				}
 			}
 			if (shipLenCounter == 1){
+				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter++;
 					tempLoc.add(tempInfo);
-					instructionArea.setText("Place battle ship No." + (shipCounter + 1) +"\nIt's size is 3");
+					instructionArea.setText("Place battle ship No.4" + "\nIt's size is 3");
+					playerButtons[row][col].setBackground(new Color(162, 185, 255));
+					return;
 				}
 				else {
 					instructionArea.setText("You should not place it here");
+					return;
 				}
 			}
 			if (shipLenCounter == 2){
+				System.out.println("shipCounter = " + shipCounter + ", shipLenCounter = " + shipLenCounter);
 				if (isLocOk(tempInfo)){
 					shipLenCounter = 0;
 					tempLoc.add(tempInfo);
@@ -201,9 +268,12 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 							computerButtons[boardRow][boardCol].setEnabled(true);
 						}
 					}
+					playerButtons[row][col].setBackground(new Color(162, 185, 255));
+					return;
 				}
 				else {
 					instructionArea.setText("You should not place it here");
+					return;
 				}
 			}
 		}
@@ -220,12 +290,11 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		if (shipLenCounter == 1){
 			// 计算两点间距离判断是否是周围八个格子中的一个
 			int[] tempInfo = tempLoc.get(0);
-			double dis = (tempInfo[0] - loc[0]) * (tempInfo[0] - loc[0])
-					+ (tempInfo[1] - loc[1]) * (tempInfo[1] - loc[1]);
+			double dis = (tempInfo[0] - loc[0]) * (tempInfo[0] - loc[0]) + (tempInfo[1] - loc[1]) * (tempInfo[1] - loc[1]);
 			if (playerBoard.gameBoard[loc[0]][loc[1]] != 0){
 				return false;
 			}
-			if (dis >= 4){
+			if (dis >= 2){
 				return false;
 			}
 		}
@@ -268,7 +337,13 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 	
 	// 监听方法
 	public void actionPerformed(ActionEvent e){
-		
+		for (int row = 0; row < playerBoard.getRowNum(); row++){
+			for (int col = 0; col < playerBoard.getColNum(); col++){
+				if (e.getSource() == playerButtons[row][col]){
+					addShips(row, col);
+				}
+			}
+		}
 	}
 	
 	
