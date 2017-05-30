@@ -5,6 +5,7 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -16,13 +17,14 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 	GameBoard computerBoard, playerBoard;
 	JButton[][] computerButtons, playerButtons;
 	JTextArea instructionArea, stateArea;
-	int shipCount, shipLenCount;
-	int[][] tempLoc = {};
+	int shipCounter, shipLenCounter;
+	//int[][] tempLoc = {};
+	ArrayList<int[]> tempLoc = new ArrayList();
 	
 	// 构造函数
 	public PVEModeFrame(){
-		shipCount = 0;
-		shipLenCount = 0;
+		shipCounter = 0;
+		shipLenCounter = 0;
 		computerBoard = new GameBoard();
 		playerBoard = new GameBoard(4);
 		computerButtons = new JButton[computerBoard.getRowNum()][computerBoard.getColNum()];
@@ -53,7 +55,7 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		instructionArea.setBorder(BorderFactory.createLineBorder(Color.black,1));
 		instructionArea.setFont(new Font("Arial", Font.BOLD, 24));
 		instructionArea.setLineWrap(true);
-		instructionArea.setText("Place your battle ship No.1\nIt's size is 2");
+		instructionArea.setText("Place battle ship No.1\nIt's size is 2");
 		stateArea = new JTextArea("");
 		stateArea.setEditable(false);
 		stateArea.setBorder(BorderFactory.createLineBorder(Color.black,1));
@@ -100,16 +102,163 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 	
 	// 玩家确定船的位置
 	public void addShips(int row, int col){
-		if (shipCount == 0){
-			if (shipLenCount == 0){
-				shipLenCount++;
+		int[] tempInfo = {row, col};
+		if (shipCounter == 0 || shipCounter == 1){
+			if (shipLenCounter == 0){
+				if (isLocOk(tempInfo)){
+					shipLenCounter++;
+					tempLoc.add(tempInfo);
+					instructionArea.setText("Place battle ship No." + (shipCounter + 1) +"\nIt's size is 2");
+				}
+				else {
+					instructionArea.setText("You should not place it here");
+				}
+			}
+			if (shipLenCounter == 1){
+				if (isLocOk(tempInfo)){
+					shipLenCounter = 0;
+					tempLoc.add(tempInfo);
+					playerBoard.addOneShip(shipCounter, tempLoc);
+					tempLoc.clear();
+					shipCounter++;
+					instructionArea.setText("Place battle ship No." + (shipCounter + 2) + "\nIt's size is " + (shipCounter + 2));
+				}
+				else {
+					instructionArea.setText("You should not place it here");
+				}
+			}
+		}
+		if (shipCounter == 2){
+			if (shipLenCounter == 0){
+				if (isLocOk(tempInfo)){
+					shipLenCounter++;
+					tempLoc.add(tempInfo);
+					instructionArea.setText("Place battle ship No." + (shipCounter + 1) +"\nIt's size is 3");
+				}
+				else {
+					instructionArea.setText("You should not place it here");
+				}
+			}
+			if (shipLenCounter == 1){
+				if (isLocOk(tempInfo)){
+					shipLenCounter++;
+					tempLoc.add(tempInfo);
+					instructionArea.setText("Place battle ship No." + (shipCounter + 1) +"\nIt's size is 3");
+				}
+				else {
+					instructionArea.setText("You should not place it here");
+				}
+			}
+			if (shipLenCounter == 2){
+				if (isLocOk(tempInfo)){
+					shipLenCounter = 0;
+					tempLoc.add(tempInfo);
+					playerBoard.addOneShip(shipCounter, tempLoc);
+					tempLoc.clear();
+					shipCounter++;
+					instructionArea.setText("Place battle ship No." + (shipCounter + 1) +"\nIt's size is 3");
+				}
+				else {
+					instructionArea.setText("You should not place it here");
+				}
+			}
+		}
+		if (shipCounter == 3){
+			if (shipLenCounter == 0){
+				if (isLocOk(tempInfo)){
+					shipLenCounter++;
+					tempLoc.add(tempInfo);
+					instructionArea.setText("Place battle ship No." + (shipCounter + 1) +"\nIt's size is 3");
+				}
+				else {
+					instructionArea.setText("You should not place it here");
+				}
+			}
+			if (shipLenCounter == 1){
+				if (isLocOk(tempInfo)){
+					shipLenCounter++;
+					tempLoc.add(tempInfo);
+					instructionArea.setText("Place battle ship No." + (shipCounter + 1) +"\nIt's size is 3");
+				}
+				else {
+					instructionArea.setText("You should not place it here");
+				}
+			}
+			if (shipLenCounter == 2){
+				if (isLocOk(tempInfo)){
+					shipLenCounter = 0;
+					tempLoc.add(tempInfo);
+					playerBoard.addOneShip(shipCounter, tempLoc);
+					tempLoc.clear();
+					shipCounter = 0;
+					instructionArea.setText("Your formation of your ships is all set");
+					for (int boardRow = 0; boardRow < playerBoard.getRowNum(); boardRow++){
+						for (int boardCol = 0; boardCol < playerBoard.getColNum(); boardCol++){
+							playerButtons[boardRow][boardCol].setEnabled(false);
+						}
+					}
+				}
+				else {
+					instructionArea.setText("You should not place it here");
+				}
 			}
 		}
 	}
 	
-	// 确定选择的位置是否符合规则
+	// addShips: 确定选择的位置是否符合规则，会需要 shipLenCounter 的数值，所以需要放在改动之前
 	public boolean isLocOk(int[] loc){
-		// TODO 确定是否符合规则（顺便想个名字）
+		// TODO 按照现在的逻辑，会出现在无法添加船的位置加了船之后无法继续的情况
+		if (shipLenCounter == 0){
+			if (playerBoard.gameBoard[loc[0]][loc[1]] != 0){
+				return false;
+			}
+		}
+		if (shipLenCounter == 1){
+			// 计算两点间距离判断是否是周围八个格子中的一个
+			int[] tempInfo = tempLoc.get(0);
+			double dis = (tempInfo[0] - loc[0]) * (tempInfo[0] - loc[0])
+					+ (tempInfo[1] - loc[1]) * (tempInfo[1] - loc[1]);
+			if (playerBoard.gameBoard[loc[0]][loc[1]] != 0){
+				return false;
+			}
+			if (dis >= 4){
+				return false;
+			}
+		}
+		if (shipLenCounter == 2){
+			int[] tempInfo0 = tempLoc.get(0);
+			int[] tempInfo1 = tempLoc.get(1);
+			if (tempInfo0[0] == tempInfo1[0]){
+				if (loc[0] != tempInfo0[0]){
+					return false;
+				}
+				if (tempInfo0[1] > tempInfo1[1]){
+					if ((loc[1] != tempInfo0[1] + 1) && (loc[1] != tempInfo1[1] - 1)){
+						return false;
+					}
+				}
+				else if (tempInfo0[1] < tempInfo1[1]){
+					if ((loc[1] != tempInfo0[1] - 1) && (loc[1] != tempInfo1[1] + 1)){
+						return false;
+					}
+				}
+			}
+			if (tempInfo0[1] == tempInfo1[1]){
+				if (loc[1] != tempInfo0[1]){
+					return false;
+				}
+				if (tempInfo0[0] > tempInfo1[0]){
+					if ((loc[0] != tempInfo0[0] + 1) && (loc[0] != tempInfo1[0] - 1)){
+						return false;
+					}
+				}
+				else if (tempInfo0[0] < tempInfo1[0]){
+					if ((loc[0] != tempInfo0[0] - 1) && (loc[0] != tempInfo1[0] + 1)){
+						return false;
+					}
+				}
+			}
+		}
 		return true;
 	}
 	

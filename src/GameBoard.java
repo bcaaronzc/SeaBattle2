@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class GameBoard {
@@ -52,8 +53,15 @@ public class GameBoard {
 	}
 
 	// 添加单个船
-	public void addOneShip(int shipNum, int[][] initLoc){
-		battleShips[shipNum].setLoc(initLoc);
+	public void addOneShip(int shipNum, ArrayList<int[]> initLoc){
+		if (initLoc.size() == 2){
+			int[][] tempLoc = {initLoc.get(0), initLoc.get(1)};
+			battleShips[shipNum].setLoc(tempLoc);
+		}
+		if (initLoc.size() == 3){
+			int[][] tempLoc = {initLoc.get(0), initLoc.get(1), initLoc.get(2)};
+			battleShips[shipNum].setLoc(tempLoc);
+		}
 	}
 	
 	// 确定船的位置
