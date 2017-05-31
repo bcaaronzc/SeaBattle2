@@ -369,21 +369,55 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		instructionArea.setText("Your turn");
 	}
 		
+	// actionPerformed: 玩家回合，返回值为是否命中
+	public boolean playerMove(int rowChoice, int colChoice){
+		ImageIcon hitIcon = new ImageIcon("src/Image/hit.jpg");
+		int playerHitLoc[] = {rowChoice, colChoice};
+		computerBoard.fireCannon(playerHitLoc);
+		if (computerBoard.gameBoard[rowChoice][colChoice] == -1){
+			computerButtons[rowChoice][colChoice].setIcon(hitIcon);
+			if (computerBoard.isWin()){
+				PlayerWinDialog playerWinDialog = new PlayerWinDialog();
+				return true;
+			}
+			return true;
+		}
+		if (computerBoard.gameBoard[rowChoice][colChoice] == 0){
+			computerButtons[rowChoice][colChoice].setBackground(new Color(162, 185, 255));
+			return false;
+		}
+		return false;
+	}
+
+	// actionPerformed: 电脑回合，TODO 加入困难简单模式切换
+	public void computerMove(){
+		ImageIcon hitIcon = new ImageIcon("src/Image/hit.jpg");
+		boolean repeat = false;
+		do {
+			int[] computerHitLoc = easyComputer();
+			playerBoard.fireCannon(computerHitLoc);
+			if (playerBoard.gameBoard[computerHitLoc[0]][computerHitLoc[1]] == -1){
+				playerButtons[computerHitLoc[0]][computerHitLoc[1]].setIcon(hitIcon);
+				if (playerBoard.isWin()){
+					PlayerLoseDialog playerLoseDialog = new PlayerLoseDialog();
+					repeat = false;
+					break;
+				}
+				repeat = true;
+			}
+			if (playerBoard.gameBoard[computerHitLoc[0]][computerHitLoc[1]] == 0){
+				playerButtons[computerHitLoc[0]][computerHitLoc[1]].setBackground(new Color(162, 185, 255));
+				repeat = false;
+			}
+		} while (repeat);
+	}
+	
 	// oneRound: 简单的电脑
 	public int[] easyComputer(){
 		int maxRow = playerBoard.getRowNum();
 		int maxCol = playerBoard.getColNum();
 		int randomRow = (int)(Math.random() * maxRow);
 		int randomCol = (int)(Math.random() * maxCol);
-
-		instructionArea.setText("Computer's turn");
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		int[] randomLoc = {randomRow, randomCol};
 		while (blocksTaken.contains(randomLoc)){
 			randomRow = (int)(Math.random() * maxRow);
@@ -414,12 +448,20 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		for (int row = 0; row < computerBoard.getRowNum(); row++){
 			for (int col = 0; col < computerBoard.getColNum(); col++){
 				if (e.getSource() == computerButtons[row][col]){
-					oneRound(row, col);
+					if (!playerMove(row, col)){
+						instructionArea.setText("Computer's turn");
+						try {
+							Thread.sleep(500);
+						} catch (InterruptedException e2) {
+							e2.printStackTrace();
+						}
+						computerMove();
+						instructionArea.setText("Your turn");
+					}
 				}
 			}
 		}
 	}
-	
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
