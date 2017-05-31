@@ -6,6 +6,8 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -246,7 +248,8 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 					playerBoard.addOneShip(shipCounter, tempLoc);
 					tempLoc.clear();
 					shipCounter = 0;
-					instructionArea.setText("Game start");
+					instructionArea.setText("Your turn");
+					stateArea.setText("Game start");
 					for (int boardRow = 0; boardRow < playerBoard.getRowNum(); boardRow++){
 						for (int boardCol = 0; boardCol < playerBoard.getColNum(); boardCol++){
 							playerButtons[boardRow][boardCol].setEnabled(false);
@@ -327,6 +330,7 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 	// actionPerformed: 一个回合，玩家走一步，电脑走若干步
 	public void oneRound(int rowChoice, int colChoice){
 		// TODO 模式切换，困难的电脑
+		instructionArea.setText("Your turn");
 		ImageIcon hitIcon = new ImageIcon("src/Image/hit.jpg");
 		int playerHitLoc[] = {rowChoice, colChoice};
 		computerBoard.fireCannon(playerHitLoc);
@@ -342,6 +346,8 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 			computerButtons[rowChoice][colChoice].setBackground(new Color(162, 185, 255));
 		}
 		
+		instructionArea.setText("Computer's turn");
+		System.out.println("Computer's turn.");
 		boolean repeat = false;
 		do {
 			int[] computerHitLoc = easyComputer();
@@ -360,20 +366,24 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 				repeat = false;
 			}
 		} while (repeat);
+		instructionArea.setText("Your turn");
 	}
-	
+		
 	// oneRound: 简单的电脑
 	public int[] easyComputer(){
 		int maxRow = playerBoard.getRowNum();
 		int maxCol = playerBoard.getColNum();
 		int randomRow = (int)(Math.random() * maxRow);
 		int randomCol = (int)(Math.random() * maxCol);
+
+		instructionArea.setText("Computer's turn");
 		try {
-			Thread.sleep(500);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		int[] randomLoc = {randomRow, randomCol};
 		while (blocksTaken.contains(randomLoc)){
 			randomRow = (int)(Math.random() * maxRow);
