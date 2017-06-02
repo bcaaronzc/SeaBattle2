@@ -23,6 +23,7 @@ public class PVPModeFrame extends JFrame implements ActionListener{
 	int shipCounter = 0;
 	int shipLenCounter = 0;
 	ArrayList<int[]> tempLoc = new ArrayList<int[]>();
+	boolean gameStart;
 	
 	// 构造函数
 	public PVPModeFrame(){
@@ -100,7 +101,7 @@ public class PVPModeFrame extends JFrame implements ActionListener{
 	
 	// actionPerformed: 玩家确定船的位置
 	public void addShips(int row, int col, JButton[][] playerButtons, JButton[][] computerButtons, GameBoard playerBoard, GameBoard computerBoard){
-		int[] tempInfo = {row, col};
+ 		int[] tempInfo = {row, col};
 		// 第一艘船
 		if (shipCounter == 0){
 			if (shipLenCounter == 0){
@@ -325,24 +326,24 @@ public class PVPModeFrame extends JFrame implements ActionListener{
 	}
 	
 	// actionPerformed: 玩家回合，返回值为是否命中
-		public boolean playerMove(int rowChoice, int colChoice, JButton[][] computerButtons, GameBoard computerBoard){
-			ImageIcon hitIcon = new ImageIcon("src/Image/hit.jpg");
-			int playerHitLoc[] = {rowChoice, colChoice};
-			computerBoard.fireCannon(playerHitLoc);
-			if (computerBoard.gameBoard[rowChoice][colChoice] == -1){
-				computerButtons[rowChoice][colChoice].setIcon(hitIcon);
-				if (computerBoard.isWin()){
-					PlayerWinDialog playerWinDialog = new PlayerWinDialog();
-					return true;
-				}
+	public boolean playerMove(int rowChoice, int colChoice, JButton[][] computerButtons, GameBoard computerBoard){
+		ImageIcon hitIcon = new ImageIcon("src/Image/hit.jpg");
+		int playerHitLoc[] = {rowChoice, colChoice};
+		computerBoard.fireCannon(playerHitLoc);
+		if (computerBoard.gameBoard[rowChoice][colChoice] == -1){
+			computerButtons[rowChoice][colChoice].setIcon(hitIcon);
+			if (computerBoard.isWin()){
+				PlayerWinDialog playerWinDialog = new PlayerWinDialog();
 				return true;
 			}
-			if (computerBoard.gameBoard[rowChoice][colChoice] == 0){
-				computerButtons[rowChoice][colChoice].setBackground(new Color(162, 185, 255));
-				return false;
-			}
+			return true;
+		}
+		if (computerBoard.gameBoard[rowChoice][colChoice] == 0){
+			computerButtons[rowChoice][colChoice].setBackground(new Color(162, 185, 255));
 			return false;
 		}
+		return false;
+	}
 	
 	// 监听方法
 	public void actionPerformed(ActionEvent e){
