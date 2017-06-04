@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -61,17 +62,30 @@ public class StartFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e){
 		if (e.getActionCommand() == "Start"){
 			System.out.println("Start");
+			/* ------------------------------- Changed in school ---------------------------------
 			GameFrame gameFrame = new GameFrame();
 			gameFrame.gameBoard.printBoard();
+			-------------------------------------------------------------------------------------*/
+			ModeChooseDialog modeChooseDialog = new ModeChooseDialog();
 		}
 		if (e.getActionCommand() == "High Score"){
 			System.out.println("HighScore");
+			/*----------------------------------------------- Changed for Java 1.6 -------------------------------------
 			try {
 				HighScoreDialog highScoreDialog = new HighScoreDialog();
 			} catch (NumberFormatException | IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
+			*/
+			try {
+				HighScoreDialog highScoreDialog = new HighScoreDialog();
+			} catch (NumberFormatException e1) {
+				e1.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			//----------------------------------------------------------------------------------------------------------
 		}
 		if (e.getActionCommand() == "Quit"){
 			System.out.println("Quit");
@@ -129,6 +143,93 @@ class HighScoreDialog extends JDialog implements ActionListener{
 	
 	public void actionPerformed(ActionEvent e){
 		if (e.getActionCommand() == "Ok"){
+			this.dispose();
+		}
+	}
+}
+
+class ModeChooseDialog extends JDialog implements ActionListener{
+	JButton originalModeButton, PVEModeButton, cancelButton;
+	
+	public ModeChooseDialog(){
+		originalModeButton = new JButton("Original Mode");
+		originalModeButton.addActionListener(this);
+		PVEModeButton = new JButton("PVE Mode");
+		PVEModeButton.addActionListener(this);
+		cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(this);
+		
+		this.setTitle("Choose Game Mode");
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setBounds(530, 379, 200, 180);		
+		JPanel modePanel = new JPanel();
+		JPanel cancelPanel = new JPanel();
+		modePanel.setBorder(BorderFactory.createTitledBorder("Choose game mode"));
+		
+		modePanel.add(originalModeButton);
+		modePanel.add(PVEModeButton);
+		cancelPanel.add(cancelButton);
+		
+		this.add(modePanel, BorderLayout.CENTER);
+		this.add(cancelPanel, BorderLayout.SOUTH);
+		
+		this.setVisible(true);
+	}
+	
+	public void actionPerformed(ActionEvent e){
+		if (e.getActionCommand() == "Cancel"){
+			this.dispose();
+		}
+		if (e.getActionCommand() == "Original Mode"){
+			GameFrame gameFrame = new GameFrame();
+			gameFrame.gameBoard.printBoard();
+			this.dispose();
+		}
+		if (e.getActionCommand() == "PVE Mode"){
+			DifficultyChooseDialog difficultyChooseDialog = new DifficultyChooseDialog();
+			this.dispose();
+		}
+	}
+}
+
+class DifficultyChooseDialog extends JDialog implements ActionListener{
+	JButton easyButton, hardButton, cancelButton;
+	
+	public DifficultyChooseDialog(){
+		easyButton = new JButton("Easy Mode");
+		easyButton.addActionListener(this);
+		hardButton = new JButton("Hard Mode");
+		hardButton.addActionListener(this);
+		cancelButton = new JButton("Cancel");
+		cancelButton.addActionListener(this);
+		
+		this.setTitle("Choose Difficulty");
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setBounds(530, 379, 200, 180);		
+		JPanel difficultyPanel = new JPanel();
+		JPanel cancelPanel = new JPanel();
+		difficultyPanel.setBorder(BorderFactory.createTitledBorder("Choose difficulty"));
+		
+		difficultyPanel.add(easyButton);
+		difficultyPanel.add(hardButton);
+		cancelPanel.add(cancelButton);
+		
+		this.add(difficultyPanel, BorderLayout.CENTER);
+		this.add(cancelPanel, BorderLayout.SOUTH);
+		
+		this.setVisible(true);
+	}
+	
+	public void actionPerformed(ActionEvent e){
+		if (e.getActionCommand() == "Cancel"){
+			this.dispose();
+		}
+		if (e.getActionCommand() == "Easy Mode"){
+			PVEModeFrame PVEMode = new PVEModeFrame(false);
+			this.dispose();
+		}
+		if (e.getActionCommand() == "Hard Mode"){
+			PVEModeFrame PVEMode = new PVEModeFrame(true);
 			this.dispose();
 		}
 	}

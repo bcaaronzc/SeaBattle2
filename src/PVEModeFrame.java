@@ -26,15 +26,18 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 	int shipLenCounter = 0;
 	ArrayList<int[]> tempLoc = new ArrayList<int[]>();
 	ArrayList<int[]> blocksTaken = new ArrayList<int[]>();
+	boolean isHard = false;
 	
 	// 构造函数
-	public PVEModeFrame(){
+	public PVEModeFrame(boolean initIsHard){
+		isHard = initIsHard;
 		shipCounter = 0;
 		shipLenCounter = 0;
 		computerBoard = new GameBoard();
 		playerBoard = new GameBoard(4);
 		computerButtons = new JButton[computerBoard.getRowNum()][computerBoard.getColNum()];
 		playerButtons = new JButton[playerBoard.getRowNum()][playerBoard.getColNum()];
+		blocksTaken = new ArrayList<int[]>();
 		
 		this.setTitle("SeaBattle2");
 		this.setSize(600 + 2 * 80 * computerBoard.getRowNum(), 80 * computerBoard.getColNum());
@@ -327,48 +330,6 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		return true;
 	}
 
-	// actionPerformed: 一个回合，玩家走一步，电脑走若干步
-	public void oneRound(int rowChoice, int colChoice){
-		// TODO 模式切换，困难的电脑
-		instructionArea.setText("Your turn");
-		ImageIcon hitIcon = new ImageIcon("src/Image/hit.jpg");
-		int playerHitLoc[] = {rowChoice, colChoice};
-		computerBoard.fireCannon(playerHitLoc);
-		if (computerBoard.gameBoard[rowChoice][colChoice] == -1){
-			computerButtons[rowChoice][colChoice].setIcon(hitIcon);
-			if (computerBoard.isWin()){
-				PlayerWinDialog playerWinDialog = new PlayerWinDialog();
-				return;
-			}
-			return;
-		}
-		if (computerBoard.gameBoard[rowChoice][colChoice] == 0){
-			computerButtons[rowChoice][colChoice].setBackground(new Color(162, 185, 255));
-		}
-		
-		instructionArea.setText("Computer's turn");
-		System.out.println("Computer's turn.");
-		boolean repeat = false;
-		do {
-			int[] computerHitLoc = easyComputer();
-			playerBoard.fireCannon(computerHitLoc);
-			if (playerBoard.gameBoard[computerHitLoc[0]][computerHitLoc[1]] == -1){
-				playerButtons[computerHitLoc[0]][computerHitLoc[1]].setIcon(hitIcon);
-				if (playerBoard.isWin()){
-					PlayerLoseDialog playerLoseDialog = new PlayerLoseDialog();
-					repeat = false;
-					break;
-				}
-				repeat = true;
-			}
-			if (playerBoard.gameBoard[computerHitLoc[0]][computerHitLoc[1]] == 0){
-				playerButtons[computerHitLoc[0]][computerHitLoc[1]].setBackground(new Color(162, 185, 255));
-				repeat = false;
-			}
-		} while (repeat);
-		instructionArea.setText("Your turn");
-	}
-		
 	// actionPerformed: 玩家回合，返回值为是否命中
 	public boolean playerMove(int rowChoice, int colChoice){
 		ImageIcon hitIcon = new ImageIcon("src/Image/hit.jpg");
@@ -390,50 +351,104 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 	}
 
 	// actionPerformed: 电脑回合，TODO 加入困难简单模式切换
-	public void computerMove(){
+	public void computerMove(boolean isHardMode){
 		ImageIcon hitIcon = new ImageIcon("src/Image/hit.jpg");
+		int lastRow = 0;
+		int lastCol = 0;
 		boolean repeat = false;
 		do {
-			int[] computerHitLoc = easyComputer();
-			playerBoard.fireCannon(computerHitLoc);
+			int[] computerHitLoc = {0, 0};
+			if (repeat && isHardMode){
+				computerHitLoc = hardComputer(lastRow, lastCol);
+			}
+			else {
+				computerHitLoc = easyComputer();
+			}
+			System.out.println("Computer hit: " + computerHitLoc[0] + ", " + computerHitLoc[1]);
+			playerBoard.fireCannon(computerHitLoc);/*
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e2) {
+				e2.printStackTrace();
+			}*/
 			if (playerBoard.gameBoard[computerHitLoc[0]][computerHitLoc[1]] == -1){
+				lastRow = computerHitLoc[0];
+				lastCol = computerHitLoc[1];
 				playerButtons[computerHitLoc[0]][computerHitLoc[1]].setIcon(hitIcon);
 				if (playerBoard.isWin()){
 					PlayerLoseDialog playerLoseDialog = new PlayerLoseDialog();
 					repeat = false;
 					break;
 				}
-				repeat = true;
+				else {
+					repeat = true;
+				}
 			}
-			if (playerBoard.gameBoard[computerHitLoc[0]][computerHitLoc[1]] == 0){
+			else if (playerBoard.gameBoard[computerHitLoc[0]][computerHitLoc[1]] == 0){
 				playerButtons[computerHitLoc[0]][computerHitLoc[1]].setBackground(new Color(162, 185, 255));
 				repeat = false;
+			}
+			else {
+				System.out.println("Something went wrong.");
 			}
 		} while (repeat);
 	}
 	
 	// oneRound: 简单的电脑
 	public int[] easyComputer(){
+		int tryCounter = 0;
 		int maxRow = playerBoard.getRowNum();
 		int maxCol = playerBoard.getColNum();
 		int randomRow = (int)(Math.random() * maxRow);
 		int randomCol = (int)(Math.random() * maxCol);
 		int[] randomLoc = {randomRow, randomCol};
-		while (blocksTaken.contains(randomLoc)){
+		while (arrayListContains(blocksTaken, randomLoc)){
+			tryCounter++;
 			randomRow = (int)(Math.random() * maxRow);
 			randomCol = (int)(Math.random() * maxCol);
 			randomLoc[0] = randomRow;
 			randomLoc[1] = randomCol;
 		}
+		System.out.println("Try: " + tryCounter);
 		blocksTaken.add(randomLoc);
 		return randomLoc;
 	}
 	
 	// oneRound: 困难的电脑
-	public int[] hardComputer(int maxRow, int maxCol){
-		// TODO 困难的电脑
-		int[] finalLoc = {maxRow, maxCol};
+	public int[] hardComputer(int hitRow, int hitCol){
+		int[] finalLoc = {hitRow, hitCol};
+		int[] tempLocUp = {hitRow - 1, hitCol};
+		int[] tempLocDown = {hitRow + 1, hitCol};
+		int[] tempLocLeft = {hitRow, hitCol - 1};
+		int[] tempLocRight = {hitRow, hitCol + 1};
+		if (hitRow - 1 >= 0 && !arrayListContains(blocksTaken, tempLocUp)){
+			finalLoc = tempLocUp;
+		}
+		else if (hitRow + 1 <= playerBoard.getRowNum() && !arrayListContains(blocksTaken, tempLocDown)){
+			finalLoc = tempLocDown;
+		}
+		else if (hitCol - 1 >= 0 && !arrayListContains(blocksTaken, tempLocLeft)){
+			finalLoc = tempLocLeft;
+		}
+		else if (hitCol + 1 <= playerBoard.getColNum() && !arrayListContains(blocksTaken, tempLocRight)){
+			finalLoc = tempLocRight;
+		}
+		else {
+			finalLoc = easyComputer();
+		}
+		blocksTaken.add(finalLoc);
+		showBlocksTaken();
 		return finalLoc;
+	}
+	
+	// ArrayList 查重, ArrayList 的 contains 方法用的是 equals 来判断……需要重写
+	public boolean arrayListContains(ArrayList<int[]> arrayList, int[] item){
+		for (int i = 0; i < arrayList.size(); i++){
+			if (arrayList.get(i)[0] == item[0] && arrayList.get(i)[1] == item[1]){
+				return true;
+			}
+		}
+		return false;
 	}
 	
 	// 监听方法
@@ -448,24 +463,34 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		for (int row = 0; row < computerBoard.getRowNum(); row++){
 			for (int col = 0; col < computerBoard.getColNum(); col++){
 				if (e.getSource() == computerButtons[row][col]){
+					System.out.println("Player Moved");
 					if (!playerMove(row, col)){
 						instructionArea.setText("Computer's turn");
-						try {
-							Thread.sleep(500);
-						} catch (InterruptedException e2) {
-							e2.printStackTrace();
+						if (isHard){
+							computerMove(true);
 						}
-						computerMove();
+						else {
+							computerMove(false);
+						}
 						instructionArea.setText("Your turn");
+						showBlocksTaken();
 					}
 				}
 			}
 		}
 	}
 	
+	// 显示占用的格子
+	public void showBlocksTaken(){
+		System.out.println("Blocks taken: ");
+		for (int i = 0; i < blocksTaken.size(); i++){
+			System.out.println("(" + blocksTaken.get(i)[0] + ", " + blocksTaken.get(i)[1] + ") ");
+		}
+	}
+	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		PVEModeFrame pveMode = new PVEModeFrame();
+		// 构造函数中参数为 true 表示困难模式
+		PVEModeFrame pveMode = new PVEModeFrame(true);
 	}
 }
 
