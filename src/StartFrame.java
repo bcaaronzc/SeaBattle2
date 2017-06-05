@@ -1,11 +1,11 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -24,60 +24,49 @@ public class StartFrame extends JFrame implements ActionListener{
 		this.setBounds(200, 200, 860, 538);
 		this.setTitle("SeaBattle2");
 		this.setBackground(new Color(255, 255, 255));
-		this.getContentPane().setBackground(Color.white);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		
-		ImageIcon background = new ImageIcon("src/Image/background.jpg");
-		JLabel backgroundLabel = new JLabel();
-		backgroundLabel.setIcon(background);
-		this.add(backgroundLabel, BorderLayout.CENTER);
+		ImagePanel backgroundPanel = new ImagePanel();
 		
-		JPanel buttonPan = new JPanel();
-		buttonPan.setLayout(new GridLayout(1, 3));
-		
-		start = new JButton("Start");
-		highScore = new JButton("High Score");
-		quit = new JButton("Quit");
+		start = new JButton();
+		start.setIcon(new ImageIcon("src/Image/startSmallClean.png"));
+		start.setBounds(107, 20, 54, 25);
+		start.setBorderPainted(false);
+		highScore = new JButton();
+		highScore.setIcon(new ImageIcon("src/Image/highScoreSmallClean.png"));
+		highScore.setBounds(107, 50, 54, 25);
+		highScore.setBorderPainted(false);
+		quit = new JButton();
+		quit.setIcon(new ImageIcon("src/Image/quitSmallClean.png"));
+		quit.setBounds(107, 80, 54, 25);
+		quit.setBorderPainted(false);
 		
 		start.addActionListener(this);
 		highScore.addActionListener(this);
 		quit.addActionListener(this);
 		
-		start.setBackground(new Color(0,0,255));  
+		highScore.setContentAreaFilled(false);
+		start.setContentAreaFilled(false);
+		quit.setContentAreaFilled(false);
 		start.setOpaque(false);
-		highScore.setBackground(new Color(0,0,255));  
-		highScore.setOpaque(false);
-		quit.setBackground(new Color(0,0,255));  
 		quit.setOpaque(false);
-		
-		buttonPan.add(highScore);
-		buttonPan.add(start);
-		buttonPan.add(quit);
-		
-		this.add(buttonPan, BorderLayout.SOUTH);
+		highScore.setOpaque(false);
+
+		backgroundPanel.add(start);
+		backgroundPanel.add(highScore);
+		backgroundPanel.add(quit);
+		this.add(backgroundPanel, BorderLayout.CENTER);
 		
 		this.setVisible(true);
 	}
 	
 	public void actionPerformed(ActionEvent e){
-		if (e.getActionCommand() == "Start"){
+		if (e.getSource() == start){
 			System.out.println("Start");
-			/* ------------------------------- Changed in school ---------------------------------
-			GameFrame gameFrame = new GameFrame();
-			gameFrame.gameBoard.printBoard();
-			-------------------------------------------------------------------------------------*/
 			ModeChooseDialog modeChooseDialog = new ModeChooseDialog();
 		}
-		if (e.getActionCommand() == "High Score"){
+		if (e.getSource() == highScore){
 			System.out.println("HighScore");
-			/*----------------------------------------------- Changed for Java 1.6 -------------------------------------
-			try {
-				HighScoreDialog highScoreDialog = new HighScoreDialog();
-			} catch (NumberFormatException | IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-			*/
 			try {
 				HighScoreDialog highScoreDialog = new HighScoreDialog();
 			} catch (NumberFormatException e1) {
@@ -85,9 +74,8 @@ public class StartFrame extends JFrame implements ActionListener{
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-			//----------------------------------------------------------------------------------------------------------
 		}
-		if (e.getActionCommand() == "Quit"){
+		if (e.getSource() == quit){
 			System.out.println("Quit");
 			this.dispose();
 		}
@@ -232,5 +220,15 @@ class DifficultyChooseDialog extends JDialog implements ActionListener{
 			PVEModeFrame PVEMode = new PVEModeFrame(true);
 			this.dispose();
 		}
+	}
+}
+
+class ImagePanel extends JPanel{
+	public void paintComponent(Graphics g){
+		int x = 0, y = 0;
+		ImageIcon background = new ImageIcon("src/Image/background.jpg");
+		// 图片会自动缩放
+		//g.drawImage(background.getImage(), x, y, getSize().width, getSize().height, this);
+		g.drawImage(background.getImage(), x, y, this);
 	}
 }
