@@ -140,14 +140,14 @@ public class GameBoard {
 	public int getColNum(){
 		return BOARDCOL;
 	}
-	
+
 	// 获取打击位置（测试用）
 	public int[] getHitLoc(){
 		int[] tempHit = new int[2];
 		Scanner input = new Scanner(System.in);
-		System.out.print("输入打击横坐标: ");
+		System.out.println("请输入打击的横坐标: ");
 		tempHit[0] = input.nextInt();
-		System.out.print("输入打击纵坐标: ");
+		System.out.println("请输入打击的纵坐标: ");
 		tempHit[1] = input.nextInt();
 		return tempHit;
 	}
@@ -165,21 +165,20 @@ public class GameBoard {
 		System.out.println("------------------------------------------");
 	}
 	
+	// 主函数
 	public static void main(String[] args) {
 		GameBoard gameBoard = new GameBoard();
 		for (int i = 0; i < gameBoard.shipNum; i++){
 			gameBoard.battleShips[i].printStatus();
 		}
 		gameBoard.printBoard();
-		
+
 		do{
 			gameBoard.fireCannon(gameBoard.getHitLoc());
 			gameBoard.printBoard();
 		} while(!gameBoard.isWin());
-		
+
 		System.out.println("You Win!");
 		System.out.println("You took " + gameBoard.getScore() + " steps.");
-		
 	}
-
 }

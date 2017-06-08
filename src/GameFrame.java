@@ -98,9 +98,11 @@ public class GameFrame extends JFrame implements ActionListener{
 					gameBoard.fireCannon(hitLoc);
 					if (gameBoard.gameBoard[row][col] == -1){
 						buttons[row][col].setIcon(hitIcon);
+						buttons[row][col].setEnabled(false);
 					}
 					if (gameBoard.gameBoard[row][col] == 0){
 						buttons[row][col].setBackground(new Color(162, 185, 255));
+						buttons[row][col].setEnabled(false);
 					}
 					if (gameBoard.isWin()){
 						WinDialog winDialog = new WinDialog(gameBoard.getScore());
@@ -114,12 +116,13 @@ public class GameFrame extends JFrame implements ActionListener{
 			}
 		}
 	}
-	
+
 	// Ö÷º¯Êý
 	public static void main(String args[]){
 		GameFrame gameFrame = new GameFrame();
 		gameFrame.gameBoard.printBoard();
 	}
+
 }
 
 class WinDialog extends JDialog implements ActionListener{

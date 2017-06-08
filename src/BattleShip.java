@@ -93,18 +93,19 @@ public class BattleShip {
 	public int[][] getLoc(){
 		return loc;
 	}
-	
-	// 打印信息（测试用）
+
+	// 打印状态（测试用）
 	public void printStatus(){
 		System.out.println("Size = " + size);
 		System.out.println("Loc = ");
 		for (int i = 0; i < size; i++){
 			System.out.println(Arrays.toString(loc[i]));
 		}
-		System.out.print("\n");
+		System.out.println("\n");
 	}
 	
-	public static void main(String[] args) {
+	// 主函数
+	public static void main(String args[]){
 		BattleShip testShip = new BattleShip(3);
 		int testPos[][] = testShip.getRandomLoc(7, 7);
 		for (int i = 0; i < 3; i++){
@@ -115,9 +116,9 @@ public class BattleShip {
 		Scanner input = new Scanner(System.in);
 		
 		int row, col;
-		System.out.print("请输入打击横坐标：");
+		System.out.println("请输入打击的横坐标: ");
 		row = input.nextInt();
-		System.out.print("请输入打击纵坐标：");
+		System.out.println("请输入打击的纵坐标: ");
 		col = input.nextInt();
 		int[] tempLoc = {row, col};
 		

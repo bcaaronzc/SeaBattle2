@@ -44,7 +44,7 @@ public class StartFrame extends JFrame implements ActionListener{
 		start.addActionListener(this);
 		highScore.addActionListener(this);
 		quit.addActionListener(this);
-		
+
 		highScore.setContentAreaFilled(false);
 		start.setContentAreaFilled(false);
 		quit.setContentAreaFilled(false);
@@ -227,8 +227,6 @@ class ImagePanel extends JPanel{
 	public void paintComponent(Graphics g){
 		int x = 0, y = 0;
 		ImageIcon background = new ImageIcon("src/Image/background.jpg");
-		// 图片会自动缩放
-		//g.drawImage(background.getImage(), x, y, getSize().width, getSize().height, this);
 		g.drawImage(background.getImage(), x, y, this);
 	}
 }

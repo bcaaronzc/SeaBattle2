@@ -6,8 +6,6 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -251,7 +249,7 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 					playerBoard.addOneShip(shipCounter, tempLoc);
 					tempLoc.clear();
 					shipCounter = 0;
-					instructionArea.setText("Your turn");
+					instructionArea.setText("Choose a block to fire");
 					stateArea.setText("Game start");
 					for (int boardRow = 0; boardRow < playerBoard.getRowNum(); boardRow++){
 						for (int boardCol = 0; boardCol < playerBoard.getColNum(); boardCol++){
@@ -350,7 +348,7 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 		return false;
 	}
 
-	// actionPerformed: 电脑回合，TODO 加入困难简单模式切换
+	// actionPerformed: 电脑回合
 	public void computerMove(boolean isHardMode){
 		ImageIcon hitIcon = new ImageIcon("src/Image/hit.jpg");
 		int lastRow = 0;
@@ -365,12 +363,12 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 				computerHitLoc = easyComputer();
 			}
 			System.out.println("Computer hit: " + computerHitLoc[0] + ", " + computerHitLoc[1]);
-			playerBoard.fireCannon(computerHitLoc);/*
+			playerBoard.fireCannon(computerHitLoc);
 			try {
 				Thread.sleep(500);
 			} catch (InterruptedException e2) {
 				e2.printStackTrace();
-			}*/
+			}
 			if (playerBoard.gameBoard[computerHitLoc[0]][computerHitLoc[1]] == -1){
 				lastRow = computerHitLoc[0];
 				lastCol = computerHitLoc[1];
@@ -457,6 +455,7 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 			for (int col = 0; col < playerBoard.getColNum(); col++){
 				if (e.getSource() == playerButtons[row][col]){
 					addShips(row, col);
+					playerButtons[row][col].setEnabled(false);
 				}
 			}
 		}
@@ -472,9 +471,10 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 						else {
 							computerMove(false);
 						}
-						instructionArea.setText("Your turn");
+						instructionArea.setText("Choose a block to fire");
 						showBlocksTaken();
 					}
+					playerButtons[row][col].setEnabled(false);
 				}
 			}
 		}
@@ -487,11 +487,12 @@ public class PVEModeFrame extends JFrame implements ActionListener{
 			System.out.println("(" + blocksTaken.get(i)[0] + ", " + blocksTaken.get(i)[1] + ") ");
 		}
 	}
-	
+
+	// 主函数
 	public static void main(String[] args) {
-		// 构造函数中参数为 true 表示困难模式
 		PVEModeFrame pveMode = new PVEModeFrame(true);
 	}
+
 }
 
 class PlayerWinDialog extends JDialog implements ActionListener{
